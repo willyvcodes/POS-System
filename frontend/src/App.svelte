@@ -1,11 +1,15 @@
 <script>
-    import TabContent from "./components/TabContent.svelte";
+    import Main from "./pages/Main.svelte";
 </script>
 
 <main>
-  <TabContent />
+  <Main />
 </main>
 
 <style>
+
+  :global(html, body, main) {
+    height: 100% !important;
+  }
 
 </style>
