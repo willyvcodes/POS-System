@@ -23,7 +23,7 @@
                     <div class="collapse navbar-collapse d-md-flex justify-content-center" id="navbarNav">
                         <ul class="navbar-nav nav">
                             <li class="nav-item">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#dashboard">
+                                <a class="nav-link" data-bs-toggle="tab" href="#dashboard">
                                     <i class="fas fa-tachometer-alt"></i>
                                     <span>DASHBOARD</span>
                                 </a>

@@ -6,3 +6,4 @@ bundle.css
 bundle.js
 bundle.js.map
 backend/config/db.py
+db.py

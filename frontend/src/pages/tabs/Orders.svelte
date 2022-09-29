@@ -1,14 +1,59 @@
 <script>
-    //logic goes here
+    import CardProduct from "../components/CardProduct.svelte";
+    import { Input } from 'sveltestrap';
+
+    // http requests
+    import { get_all_products } from "../../helpers/http_requests"
+
+    let products = []
+    let cart_list = []
+
+    let visible_products = []
+    let search = ''
+
+    $: visible_products = search ?
+            products.filter(product => {
+                let product_name = product.name.toLowerCase()
+                return (product_name.includes(search))
+        }) : products;
+
+    const pull_all_products = async () => {
+        const resp = await get_all_products();
+        if (resp.ok) {
+            products = await resp.json();
+        }
+    }
+
+    const add_to_cart = (item) => {
+        cart_list.push(item)
+        cart_list = cart_list
+    }
+
 </script>
 
-<div class="tab-pane fade h-100" id="orders">
+<div class="tab-pane fade show active h-100" id="orders">
     <div class="container-fluid h-100">
         <div class="row h-100">
-            <div class="col-md-8 col-lg-9 h-100 bg-secondary">
-                <h3>Products</h3>
+            <div class="col-md-8 col-lg-9 bg-secondary">
+                <!-- products heading -->
+                <div class="d-flex p-2">
+                    <span class="fs-6 me-2">Products</span>
+                    <Input type="search" bind:value={search} placeholder="Search For Products..." />
+                </div>
+                <!-- products -->
+                <div class="row">
+                    {#await pull_all_products()}
+                        <p>Loading Products</p>
+                    {:then}
+                        {#each visible_products as item}
+                            <CardProduct product={item} callback={() => add_to_cart(item)} />
+                        {/each}
+                    {:catch error}
+                        <p>ERROR: Could Not Load Products {error}</p>
+                    {/await}
+                </div>
             </div>
-            <div class="col-md-4 col-lg-3 min-vh-100 p-2">
+            <div class="col-md-4 col-lg-3 h-100 p-2">
                 <div class="d-flex flex-column container-fluid h-100 bg-white">
                     <div class="row">
                         <div class="col-6">
@@ -20,22 +65,16 @@
                     </div>
                     <hr>
                     <div>
-                        <div class="row mb-2">
-                            <div class="col-8">
-                                <p class="fs-4">1 x product</p>
+                        {#each cart_list as item}
+                            <div class="row mb-2">
+                                <div class="col-8">
+                                    <p class="fs-6">{item.name}</p>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <p class="fs-6">${item.price}</p>
+                                </div>
                             </div>
-                            <div class="col-4 text-end">
-                                <p class="fs-4">$5.99</p>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-8">
-                                <p class="fs-4">1 x product</p>
-                            </div>
-                            <div class="col-4 text-end">
-                                <p class="fs-4">$5.99</p>
-                            </div>
-                        </div>
+                        {/each}
                     </div>
                     <div class="mt-auto">
                         <hr>
