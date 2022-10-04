@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from config.db import db
 from uuid import uuid4
+from random import randint
 
 router = APIRouter(
     prefix = '/api/products',
@@ -16,6 +17,13 @@ class Product(BaseModel):
     price: float
     description: str
     thumbnail: str
+    upc: str
+
+# UTILITIES
+def random_with_N_digits(n):
+    range_start = 10**(n-1)
+    range_end = (10**n)-1
+    return randint(range_start, range_end)
 
 # CREATE
 @router.post("/")
@@ -26,9 +34,11 @@ async def create_product(product: Product):
         "type": product.type,
         "price": product.price,
         "description": product.description,
-        "thumbnail": product.thumbnail
+        "thumbnail": product.thumbnail,
+        "upc": random_with_N_digits(13)
     }
     collection.insert_one(product)
+    return {"detail": "Created Successfully"}
     
 
 # READ
@@ -46,6 +56,10 @@ async def get_product_by_id(item_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product Not Found")
     return product
 
+@router.get("/generate_upc/{upc_size}")
+async def generate_new_upc(upc_size: int):
+    return random_with_N_digits(upc_size)
+
 # UPDATE
 @router.put("/{item_id}")
 async def update_product_by_id(item_id, new_product: Product):
@@ -54,7 +68,8 @@ async def update_product_by_id(item_id, new_product: Product):
         "type": new_product.type,
         "price": new_product.price,
         "description": new_product.description,
-        "thumnail": new_product.thumbnail
+        "thumnail": new_product.thumbnail,
+        "upc": new_product.upc
     }
     result = await collection.update_one({"_id": item_id}, {"$set": product})
     if not result.modified_count:

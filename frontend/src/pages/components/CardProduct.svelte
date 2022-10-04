@@ -3,14 +3,14 @@
     export let callback = () => {}
 </script>
 
-<div class="col-lg-3 col-md-4 col-6 mb-3" on:click={() => callback()}>
-    <div class="card h-100 position-relative">
-        <img src="{product.thumbnail}" class="card-img-top w-100" alt="..."/>
+<div class="col-lg-2 col-md-3 col-6 mb-3" on:click={() => callback()}>
+    <div class="card h-100 border-0 position-relative">
+        <img src="{product.thumbnail}" class="w-100" alt="..."/>
         <div class="mask-top-left">
-            <span class="badge bg-warning fs-4">${product.price}</span>
+            <span class="badge bg-success fs-5">${product.price.toFixed(2)}</span>
         </div>
-        <div class="card-body text-center">
-            <h5>{product.name}</h5>
+        <div class="card-body p-2 text-center">
+            <p class="m-0">{product.name}</p>
         </div>
     </div>
 </div>
@@ -24,7 +24,7 @@
 
     .card:hover {
         cursor: pointer;
-        box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.4);
+        box-shadow: 1px 1px 20px 0px rgba(0,0,0,0.4);
     }
 
 </style>

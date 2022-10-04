@@ -2,9 +2,13 @@
     //logic goes here
 </script>
 
-<div class="tab-pane fade" id="settings">
+<div class="tab-pane fade h-100" id="settings">
     <div class="container-fluid h-100">
-        <h1>Settings</h1>
+        <div class="row h-100">
+            <div class="col-12">
+                <p>SETTINGS</p>
+            </div>
+        </div>
     </div>
 </div>
 
