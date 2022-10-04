@@ -76,26 +76,28 @@
 <div class="tab-pane fade show active h-100" id="orders">
     <div class="container-fluid h-100">
         <div class="row h-100">
-            <div class="col-12 col-md-8 col-lg-9 bg-secondary">
+            <div class="col-12 col-md-8 col-lg-9">
                 <!-- products heading -->
                 <div class="py-2">
                     <Input type="search" bind:value={search} placeholder="Search For Item Name, Type, UPC..." />
                 </div>
                 <!-- products -->
-                <div class="row">
-                    {#await pull_all_products()}
-                        <p>Loading Products</p>
-                    {:then}
-                        {#each visible_products as item}
-                            <CardProduct product={item} callback={() => handle_add_to_cart(item)} />
-                        {/each}
-                    {:catch error}
-                        <p>ERROR: Could Not Load Products {error}</p>
-                    {/await}
+                <div class="menu-container">
+                    <div class="row">
+                        {#await pull_all_products()}
+                            <p>Loading Products</p>
+                        {:then}
+                            {#each visible_products as item}
+                                <CardProduct product={item} callback={() => handle_add_to_cart(item)} />
+                            {/each}
+                        {:catch error}
+                            <p>ERROR: Could Not Load Products {error}</p>
+                        {/await}
+                    </div>
                 </div>
             </div>
-            <div class="col-12 col-md-4 col-lg-3 px-1 py-4 min-vh-100" id="checkout_section">
-                <div class="container-fluid d-flex flex-column bg-white h-100">
+            <div class="col-12 col-md-4 col-lg-3 px-1 py-4 min-vh-100 checkout-container" id="checkout_section">
+                <div class="container-fluid d-flex flex-column h-100">
                     <div class="checkout-heading">
                         <div class="row">
                             <div class="col-6">
@@ -165,8 +167,25 @@
         .checkout-items p {
             font-size: 1rem !important;
         }
+
+        .checkout-container {
+            border-radius:  18px 0px 0px  18px !important;
+            box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+        }
     }
-    
+
+    .menu-container {
+        height: calc(100vh - 60px);
+        padding: 4px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .checkout-container {
+        border-radius: 0;
+        background-color: white;
+    }
+
     .checkout-items p {
         font-size: 1.25rem;
     }

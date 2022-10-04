@@ -15,7 +15,7 @@
 </script>
 
 <div class="container-fluid d-md-flex p-0 h-md-100">
-    <div class="bg-dark {(isSidebarHidden) ? 'sidebar-hidden' : 'sidebar'}">
+    <div class="bg-nav {(isSidebarHidden) ? 'sidebar-hidden' : 'sidebar'}">
         <!-- nav -->
         <nav class="navbar navbar-dark">
             <div class="container-fluid justify-content-md-center p-md-0">
@@ -73,7 +73,7 @@
             </button>
         </div>
     </div>
-    <div class="container-fluid p-0">
+    <div class="container-fluid p-0 bg-content">
         <TabContent />
     </div>
 </div>
@@ -92,6 +92,14 @@
         .sidebar-hidden .navbar-nav .nav-item .nav-link span {
             display: none;
         }
+    }
+
+    .bg-nav {
+        background-color: #191919;
+    }
+
+    .bg-content {
+        background-color: #cccccc;
     }
 
     .sidebar {

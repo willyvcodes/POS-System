@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import APIRouter, HTTPException, status
 from config.db import db
 from uuid import uuid4
@@ -17,7 +18,6 @@ class Product(BaseModel):
     price: float
     description: str
     thumbnail: str
-    upc: str
 
 # UTILITIES
 def random_with_N_digits(n):
@@ -35,7 +35,7 @@ async def create_product(product: Product):
         "price": product.price,
         "description": product.description,
         "thumbnail": product.thumbnail,
-        "upc": random_with_N_digits(13)
+        "upc": str(random_with_N_digits(13))
     }
     collection.insert_one(product)
     return {"detail": "Created Successfully"}
@@ -58,7 +58,7 @@ async def get_product_by_id(item_id):
 
 @router.get("/generate_upc/{upc_size}")
 async def generate_new_upc(upc_size: int):
-    return random_with_N_digits(upc_size)
+    return str(random_with_N_digits(upc_size))
 
 # UPDATE
 @router.put("/{item_id}")
@@ -68,8 +68,7 @@ async def update_product_by_id(item_id, new_product: Product):
         "type": new_product.type,
         "price": new_product.price,
         "description": new_product.description,
-        "thumnail": new_product.thumbnail,
-        "upc": new_product.upc
+        "thumnail": new_product.thumbnail
     }
     result = await collection.update_one({"_id": item_id}, {"$set": product})
     if not result.modified_count:

@@ -21,7 +21,7 @@
         }else {
             itemList[index].amount = item.amount;
         }
-        show_toaster('success', `${item.count} x ${item.name} Added To Cart`)
+        show_toaster('success', `${item.amount} x ${item.name} Added To Cart`)
         itemList = itemList
         open_add_to_cart()
     }
