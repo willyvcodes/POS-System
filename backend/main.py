@@ -1,12 +1,11 @@
-from ast import main
-from math import prod
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
 from routes.base import main_router
 
 app = FastAPI(
-    title="POS SYSTEM API",
+    title="POS",
     version="1.0"
 )
 app.include_router(main_router)

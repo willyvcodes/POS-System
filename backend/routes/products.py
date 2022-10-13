@@ -1,4 +1,3 @@
-from typing import Optional
 from fastapi import APIRouter, HTTPException, status
 from config.db import db
 from uuid import uuid4
@@ -12,12 +11,13 @@ router = APIRouter(
 collection = db.products
 
 from pydantic import BaseModel
-class Product(BaseModel):
+class ShowProduct(BaseModel):
     name: str
     type: str
     price: float
     description: str
     thumbnail: str
+
 
 # UTILITIES
 def random_with_N_digits(n):
@@ -27,7 +27,7 @@ def random_with_N_digits(n):
 
 # CREATE
 @router.post("/")
-async def create_product(product: Product):
+async def create_product(product: ShowProduct):
     product = {
         "_id": str(uuid4()),
         "name": product.name,
@@ -49,7 +49,7 @@ async def get_all_products():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product Not Found")
     return products
 
-@router.get("/{item_id}")
+@router.get("/{item_id}", response_model=ShowProduct, status_code=status.HTTP_200_OK)
 async def get_product_by_id(item_id):
     product = await collection.find_one({"_id": item_id})
     if not product:
@@ -62,7 +62,7 @@ async def generate_new_upc(upc_size: int):
 
 # UPDATE
 @router.put("/{item_id}")
-async def update_product_by_id(item_id, new_product: Product):
+async def update_product_by_id(item_id, new_product: ShowProduct):
     product = {
         "name": new_product.name,
         "type": new_product.type,

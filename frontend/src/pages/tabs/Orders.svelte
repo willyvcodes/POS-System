@@ -4,9 +4,28 @@
     import { show_toaster, show_confirm_dialog } from '../../helpers/alerts'
 
     import ModalAddToCart from "../modals/ModalAddToCart.svelte";
-    
+
     // http requests
-    import { get_all_products } from "../../helpers/http_requests"
+    import { get_all_products, create_checkout_session } from "../../helpers/http_requests"
+
+    // stripe
+    const new_checkout_session = async () => {
+        let checkout_items = []
+        cartItems.forEach(item => {
+            checkout_items.push({
+                'name': item.name,
+                'quantity': item.amount,
+                'price': parseInt(item.price*100),
+                'thumbnail': item.thumbnail
+            })
+        });
+
+        const resp = await create_checkout_session(checkout_items);
+        if (resp.ok) {
+            const checkout_url = await resp.json()
+            window.location.href = checkout_url        }
+    }
+    // 
 
     let products = []
     let cartItems = []
@@ -31,21 +50,21 @@
 
     // CHECKOUT SETTINGS
     let subtotal = 0;
-    let tax = .07;
     let total = 0;
 
     $: subtotal = cartItems.reduce((p, c) => {
         return p + (c.price * c.amount)
     }, 0)
 
-    $: total = (subtotal * tax) + subtotal;
+    $: total = subtotal;
     // 
     // DATE
     const date = new Date()
     let currentDate = date.toDateString().slice(0, -4)
 
-    // ADD TO CART MODAL
+    // Modal
     let modal_add_to_cart;
+
     let selected_item;
     const handle_add_to_cart = (new_item) => {
         const index = cartItems.findIndex(existing_item => existing_item._id === new_item._id)
@@ -141,16 +160,8 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6">
-                                <h6>Sales Tax</h6>
-                            </div>
-                            <div class="col-6 text-end">
-                                <h6>{(tax * 100).toFixed(0)}%</h6>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-12">
-                                <button class="btn btn-success btn-pay fs-3">Pay (${total.toFixed(2)})</button>
+                                <button class="btn btn-success btn-pay fs-3 {(cartItems.length == 0) ? 'disabled' : ''}" on:click={() => new_checkout_session()}>Pay (${total.toFixed(2)})</button>
                             </div>
                         </div>
                     </div>

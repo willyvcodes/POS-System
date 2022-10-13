@@ -1,7 +1,8 @@
+import os
+from dotenv import load_dotenv
 import motor.motor_asyncio
 
-MONGO_DETAILS = "mongodb+srv://<teamjuan1>:<password>@cluster0.5i8llmr.mongodb.net/test"
-
-client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS, tls=True, tlsAllowInvalidCertificates=True)
+load_dotenv()
+client = motor.motor_asyncio.AsyncIOMotorClient(os.getenv('MONGO_URI'), tls=True, tlsAllowInvalidCertificates=True)
 
 db = client.pos

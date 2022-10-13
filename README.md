@@ -9,14 +9,17 @@
 
 ## Frameworks
 
-Backend
+Database
+- [MongoDB](https://www.mongodb.com/)
+    - Using MongoDB Free Cluster
 
+Backend
 - [FastAPI](https://fastapi.tiangolo.com/)
 
 Frontend
-
 - [Svelte](https://svelte.dev/)
 - [Seveltestrap](https://sveltestrap.js.org/)
+- [Bootstraps](https://getbootstrap.com/)
 
 ## Contributing
 
@@ -29,7 +32,10 @@ Frontend
 
 ## Features
 
-.. TODO
+- Dashboard Displaying POS Stats 
+- Create Orders / Handle Payment ✅
+- Product Management
+- App Settings
 
 ## Installation
 In Order to run this you will need to install:
@@ -47,21 +53,17 @@ In Order to run this you will need to install:
         - `npm run dev`
     - # Backend
         - `cd backend`
+        - create a `.env` file inside the backend folder
+        - paste in the .env file the credentials needed. **ASK GROUP**
         - if in Windows run the `setup.bat`
         - if in Mac OS run the `setup.sh`
             - `chmod +x setup.sh`
             - `./setup.sh`
             
 - open your favorite browser 🌐
-    - got to `http://localhost:8000/`
+    - got to `localhost:8000/` for hompage
+    - go to  `localhost:8000/docs` to use API
 
-    - Port
-        - to edit the port you want to use, change the setup.bat/setup.sh and add --port <your port> to the last line
-
- # Backend
-
- - To view mongoDB and play around with it download [MongoDB Compass](https://www.mongodb.com/try/download/compass2)
- - run Compass, paste `mongodb+srv://teamjuan1:Mm9Zf7cuBB3MVR30@cluster0.5i8llmr.mongodb.net/test` and connect
- - There should be 3 databases, local, admin, and pos choose `pos` and youll see your first collection called `products`
-
- ** Note ** If you have the backend running head over to localhost:8000/docs and test out the CRUD api set for `products`
+- Stripe test data
+    - Card Number: `4242 4242 4242 4242` any future year, ex: `12/34`, CVC: `123`
+    

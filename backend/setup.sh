@@ -21,4 +21,4 @@ echo "INSTALLING DEPENDENCIES"
 pip3 install -r requirements.txt
 
 echo "RUNNING SERVER"
-uvicorn server:app --reload
+uvicorn main:app --reload
