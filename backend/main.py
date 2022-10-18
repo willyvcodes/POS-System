@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
-from fastapi.middleware.cors import CORSMiddleware
 from routes.base import main_router
 
 app = FastAPI(
@@ -14,5 +13,5 @@ app.mount("/", StaticFiles(directory="site/", html=True), name="site")
 app.mount("/build", StaticFiles(directory="site/build"), name="build")
 
 @app.get("/", tags=['Root'])
-async def read_root():
+async def root():
     return RedirectResponse("/")

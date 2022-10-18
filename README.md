@@ -1,4 +1,4 @@
-# CEN4021 - POS System
+# POS System
 
 ## Index
 

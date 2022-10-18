@@ -24,7 +24,7 @@ export const get_product_by_id = async (item_id) => {
 
 // stripe
 export const create_checkout_session = async (checkout_items) => {
-    return await fetch(`${site_path}/api/stripe/create-checkout-session`, {
+    return await fetch(`${site_path}/stripe/create-checkout-session`, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(checkout_items)
