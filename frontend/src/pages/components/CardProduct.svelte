@@ -3,9 +3,9 @@
     export let callback = () => {}
 </script>
 
-<div class="col-md-3 col-6 mb-3" on:click={() => callback()}>
+<div class="col-md-2 col-6 mb-3" on:click={() => callback()}>
     <div class="card h-100 border-0 position-relative">
-        <img src="{product.thumbnail}" class="w-100" alt="..."/>
+        <img src="{product.thumbnail}" class="product-img" alt="..."/>
         <div class="mask-top-left">
             <span class="badge bg-success fs-5">${product.price.toFixed(2)}</span>
         </div>
@@ -24,7 +24,12 @@
 
     .card:hover {
         cursor: pointer;
-        box-shadow: 1px 1px 20px 0px rgba(0,0,0,0.4);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     }
 
+    .product-img {
+        height: 150px;
+        width: 100%;
+        object-fit: cover;
+    }
 </style>

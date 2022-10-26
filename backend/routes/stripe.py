@@ -21,7 +21,7 @@ router = APIRouter(
 def create_checkout_session(check_items: List[CheckoutItem]):
     stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
     
-    domain_url = 'https://240r2g.deta.dev'
+    domain_url = 'https://240r2g.deta.dev/'
     # domain_url = 'https://localhost:8000/'
     new_line_items = []
     
