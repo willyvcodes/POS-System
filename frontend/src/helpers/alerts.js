@@ -20,7 +20,7 @@ export const show_toaster = (icon, message) => {
 export const show_confirm_dialog = (title, message, accept, cancel, callback, cancel_callback) => {
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
-          confirmButton: 'btn btn-primary swal-btn-spacer',
+          confirmButton: 'btn btn-danger swal-btn-spacer',
           cancelButton: 'btn btn-light swal-btn-spacer',
         },
         buttonsStyling: false,

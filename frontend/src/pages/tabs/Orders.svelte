@@ -40,7 +40,7 @@
                 if (product_name.includes(search.toLowerCase()) || product_type.includes(search.toLowerCase()) || product.upc.includes(search))
                     return product
         }) : products;
-
+    
     const pull_all_products = async () => {
         const resp = await get_all_products();
         if (resp.ok) {
@@ -90,87 +90,110 @@
         });
     }
 
+
+    let new_order = false
+    const handle_new_order = () => {
+        new_order = !new_order
+    }
+
 </script>
 
-<div class="tab-pane fade show active h-100" id="orders">
+<div class="tab-pane fade active show h-100" id="orders" role="tab">
     <div class="container-fluid h-100">
-        <div class="row h-100">
-            <div class="col-12 col-md-8 col-lg-9">
-                <!-- products heading -->
-                <div class="py-2">
-                    <Input type="search" bind:value={search} placeholder="Search For Item Name, Type, UPC..." />
-                </div>
-                <!-- products -->
-                <div class="menu-container">
-                    <div class="row">
-                        {#await pull_all_products()}
-                            <p>Loading Products</p>
-                        {:then}
-                            {#each visible_products as item}
-                                <CardProduct product={item} callback={() => handle_add_to_cart(item)} />
-                            {/each}
-                        {:catch error}
-                            <p>ERROR: Could Not Load Products {error}</p>
-                        {/await}
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-4 col-lg-3 px-1 py-4 min-vh-100 checkout-container" id="checkout_section">
-                <div class="container-fluid d-flex flex-column h-100">
-                    <div class="checkout-heading">
+        {#if new_order}
+            <div class="row h-100">
+                <div class="col-12 col-md-8 col-lg-9">
+                    <!-- products heading -->
+                    <div class="container-fluid my-1 py-2 bg-light rounded">
                         <div class="row">
-                            <div class="col-6">
-                                <h5>Checkout</h5>
+                            <div class="col-12 col-md-10">
+                                <Input type="search" bind:value={search} placeholder="Search For Item Name, Type, UPC..." />
                             </div>
-                            <div class="col-6 text-end">
-                                 <h5>{currentDate}</h5>
+                            <div class="col-12 col-md-2 mt-2 mt-md-0 d-md-flex justify-content-end">
+                                <button class="btn btn-warning btn-md" on:click={() => handle_new_order()}>
+                                    <span>Cancel Order</span>
+                                </button>
                             </div>
                         </div>
-                        <hr>
                     </div>
-                    <div class="checkout-items">
-                        {#each cartItems as item}
+                    <!-- products -->
+                    <div class="menu-container">
+                        <div class="row">
+                            {#await pull_all_products()}
+                                <p>Loading Products</p>
+                            {:then}
+                                {#each visible_products as item}
+                                    <CardProduct product={item} callback={() => handle_add_to_cart(item)} />
+                                {/each}
+                            {:catch error}
+                                <p>ERROR: Could Not Load Products {error}</p>
+                            {/await}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-3 px-1 py-4 min-vh-100 checkout-container" id="checkout_section">
+                    <div class="container-fluid d-flex flex-column h-100">
+                        <div class="checkout-heading">
                             <div class="row">
-                                <div class="col-9">
-                                    <div class="container-fluid d-flex p-0">
-                                        <div class="col-10">
-                                            <p>{item.amount}x {item.name}</p>
-                                        </div>
-                                        <div class="col-2">
-                                            <button class="btn btn-danger btn-md" on:click={() => delete_item_from_cart(item)}>
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
+                                <div class="col-6">
+                                    <h5>Checkout</h5>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <h5>{currentDate}</h5>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                        <div class="checkout-items">
+                            {#each cartItems as item}
+                                <div class="row">
+                                    <div class="col-9">
+                                        <div class="container-fluid d-flex p-0">
+                                            <div class="col-10">
+                                                <p>{item.amount}x {item.name}</p>
+                                            </div>
+                                            <div class="col-2">
+                                                <button class="btn btn-danger btn-md" on:click={() => delete_item_from_cart(item)}>
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="col-3 text-end">
+                                        <p>${item.price.toFixed(2)}</p>
+                                    </div>
                                 </div>
-                                <div class="col-3 text-end">
-                                    <p>${item.price.toFixed(2)}</p>
-                                </div>
-                            </div>
-                        {/each}
-                    </div>
-                    <div class="checkout-pay">
-                        <hr>
-                        <div class="row">
-                            <div class="col-6">
-                                <h6>Subtotal</h6>
-                            </div>
-                            <div class="col-6 text-end">
-                                <h6>${subtotal.toFixed(2)}</h6>
-                            </div>
+                            {/each}
                         </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <button class="btn btn-success btn-pay fs-3 {(cartItems.length == 0) ? 'disabled' : ''}" on:click={() => new_checkout_session()}>Pay (${total.toFixed(2)})</button>
+                        <div class="checkout-pay">
+                            <hr>
+                            <div class="row">
+                                <div class="col-6">
+                                    <h6>Subtotal</h6>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <h6>${subtotal.toFixed(2)}</h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <button class="btn btn-success btn-pay fs-3 {(cartItems.length == 0) ? 'disabled' : ''}" on:click={() => new_checkout_session()}>Pay (${total.toFixed(2)})</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- modals -->
+                <ModalAddToCart bind:this={modal_add_to_cart} bind:item={selected_item} bind:itemList={cartItems} />
             </div>
-        </div>
+        {:else}
+            <div class="order-container">
+                <button class="btn btn-success btn-lg" on:click={handle_new_order}>
+                    <h2 class="m-0 p-3">New Order</h2>
+                </button>
+            </div>
+        {/if}
     </div>
-    <!-- modals -->
-    <ModalAddToCart bind:this={modal_add_to_cart} bind:item={selected_item} bind:itemList={cartItems} />
 </div>
 
 <style>
@@ -185,8 +208,15 @@
         }
     }
 
+    .order-container {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;;
+    }
+
     .menu-container {
-        height: calc(100vh - 60px);
+        height: calc(100vh - 80px);
         padding: 4px;
         overflow-y: auto;
         overflow-x: hidden;

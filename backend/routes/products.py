@@ -17,6 +17,7 @@ class ShowProduct(BaseModel):
     price: float
     description: str
     thumbnail: str
+    upc: str
 
 
 # UTILITIES
@@ -56,8 +57,9 @@ async def get_product_by_id(item_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product Not Found")
     return product
 
-@router.get("/generate_upc/{upc_size}")
-async def generate_new_upc(upc_size: int):
+@router.get("/generate_upc/")
+async def generate_new_upc():
+    upc_size = 13
     return str(random_with_N_digits(upc_size))
 
 # UPDATE
@@ -68,7 +70,8 @@ async def update_product_by_id(item_id, new_product: ShowProduct):
         "type": new_product.type,
         "price": new_product.price,
         "description": new_product.description,
-        "thumnail": new_product.thumbnail
+        "thumnail": new_product.thumbnail,
+        "upc": new_product.upc
     }
     result = await collection.update_one({"_id": item_id}, {"$set": product})
     if not result.modified_count:
