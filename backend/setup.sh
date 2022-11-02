@@ -14,11 +14,9 @@ fi
 echo "ACTIVATING VIRTUAL ENVIRONMENT"
 source ./venv/bin/activate
 
-echo "... UPGRADE PIP"
-python -m pip install -–upgrade pip
-
 echo "INSTALLING DEPENDENCIES"
 pip3 install -r requirements.txt
 
 echo "RUNNING SERVER"
-uvicorn main:app --reload --ssl-keyfile "./key.pem" --ssl-certfile "./cert.pem"
+uvicorn main:app --reload
+# uvicorn main:app --reload --ssl-keyfile "./key.pem" --ssl-certfile "./cert.pem"

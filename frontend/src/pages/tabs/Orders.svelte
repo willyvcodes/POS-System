@@ -6,8 +6,8 @@
     import ModalAddToCart from "../modals/ModalAddToCart.svelte";
 
     // http requests
-    import { get_all_products, create_checkout_session, get_all_orders, create_new_order } from "../../helpers/http_requests"
-    import Dashboard from "./Dashboard.svelte";
+    import { get_all_products, create_checkout_session, create_new_order } from "../../helpers/http_requests"
+    import ModalOrderHistory from "../modals/ModalOrderHistory.svelte";
 
     // stripe
     const new_checkout_session = async () => {
@@ -20,6 +20,8 @@
                 'thumbnail': item.thumbnail
             })
         });
+        
+        create_order()
 
         const resp = await create_checkout_session(checkout_items);
         if (resp.ok) {
@@ -65,6 +67,7 @@
 
     // Modal
     let modal_add_to_cart;
+    let modal_order_history;
 
     let selected_item;
     const handle_add_to_cart = (new_item) => {
@@ -91,10 +94,27 @@
         });
     }
 
+    const create_order = async () => {
+        let order_products = []
+        cartItems.forEach(item => {
+            order_products.push({
+                "_id": item._id,
+            })
+        });
+        const resp = await create_new_order(order_products);
+        if (resp.ok) {
+            console.log('Order Created')
+        }
+    }
+
 
     let new_order = false
     const handle_new_order = () => {
         new_order = !new_order
+    }
+
+    const handle_order_history = () => {
+        modal_order_history.open_order_history()
     }
 
 </script>
@@ -184,20 +204,23 @@
                         </div>
                     </div>
                 </div>
-                <!-- modals -->
-                <ModalAddToCart bind:this={modal_add_to_cart} bind:item={selected_item} bind:itemList={cartItems} />
             </div>
         {:else}
             <div class="order-container">
-                <button class="btn btn-success btn-lg" on:click={handle_new_order}>
+                <button class="btn btn-success btn-lg " on:click={handle_new_order}>
                     <h2 class="m-0 p-3">New Order</h2>
                 </button>
-                <button class="btn btn-info btn-sm align-self-end" on:click={""}>
-                    <span>Order History</span>
+                <button class="btn btn-primary btn-md" on:click={handle_order_history}>
+                    <span class="m-0">History</span>
                 </button>
             </div>
+
         {/if}
     </div>
+
+    <!-- modals -->
+    <ModalAddToCart bind:this={modal_add_to_cart} bind:item={selected_item} bind:itemList={cartItems} />
+    <ModalOrderHistory bind:this={modal_order_history} />
 </div>
 
 <style>
@@ -212,11 +235,18 @@
         }
     }
 
+    /* .order-history-btn {
+        position: fixed;
+        bottom: 20px;
+        z-index: 1000;
+    } */
+
     .order-container {
+        height: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: space-around;
         margin-top: 20px;
     }
 
