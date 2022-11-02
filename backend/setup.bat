@@ -15,7 +15,7 @@ echo ACTIVATING VIRTUAL ENVIRONMENT
 CALL venv\Scripts\activate.bat
 
 echo ... UPGRADE PIP
-CALL pip3 install --upgrade pip
+python -m pip install -–upgrade pip
 
 echo INSTALLING DEPENDENCIES
 pip3 install -r requirements.txt

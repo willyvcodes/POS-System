@@ -15,7 +15,7 @@ echo "ACTIVATING VIRTUAL ENVIRONMENT"
 source ./venv/bin/activate
 
 echo "... UPGRADE PIP"
-pip3 install --upgrade pip
+python -m pip install -–upgrade pip
 
 echo "INSTALLING DEPENDENCIES"
 pip3 install -r requirements.txt
