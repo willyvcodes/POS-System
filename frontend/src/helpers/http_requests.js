@@ -8,6 +8,8 @@ const headers = {
 
 const site_path = get_full_site_path();
 
+// products
+
 export const create_new_product = async (item) => {
     return await fetch(`${site_path}/api/products/`, {
         method: 'POST',
@@ -48,7 +50,24 @@ export const delete_product_by_id = async (item_id) => {
 export const generate_new_upc_13 = async () => {
     return await fetch(`${site_path}/api/products/generate_upc/`, {
         method: 'GET',
+        headers: headers,
+        body: JSON.stringify(item)
+    });
+}
+
+// orders
+export const get_all_orders = async () => {
+    return await fetch(`${site_path}/api/orders/`, {
+        method: 'GET',
         headers: headers
+    });
+}
+
+export const create_new_order = async (products) => {
+    return await fetch(`${site_path}/api/orders/`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(products)
     });
 }
 

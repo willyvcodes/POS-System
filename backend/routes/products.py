@@ -1,16 +1,17 @@
-from fastapi import APIRouter, HTTPException, status
-from config.db import db
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+
 from uuid import uuid4
 from random import randint
+
+from config.db import db
+collection = db.products
 
 router = APIRouter(
     prefix = '/api/products',
     tags = ['Products']
 )
 
-collection = db.products
-
-from pydantic import BaseModel
 class ShowProduct(BaseModel):
     name: str
     type: str
@@ -19,15 +20,12 @@ class ShowProduct(BaseModel):
     thumbnail: str
     upc: str
 
-
-# UTILITIES
 def random_with_N_digits(n):
     range_start = 10**(n-1)
     range_end = (10**n)-1
     return randint(range_start, range_end)
 
-# CREATE
-@router.post("/")
+@router.post("/", status_code=201)
 async def create_product(product: ShowProduct):
     product = {
         "_id": str(uuid4()),
@@ -38,23 +36,24 @@ async def create_product(product: ShowProduct):
         "thumbnail": product.thumbnail,
         "upc": str(random_with_N_digits(13))
     }
-    collection.insert_one(product)
-    return {"detail": "Created Successfully"}
+    try: 
+        await collection.insert_one(product)
+        return {"detail": "Product Created Successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500)
     
-
-# READ
-@router.get("/", status_code=status.HTTP_200_OK)
+@router.get("/")
 async def get_all_products():
     products = await collection.find().to_list(None)
     if not products:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product Not Found")
+        raise HTTPException(status_code=404, detail="No Products Found")
     return products
 
-@router.get("/{item_id}", response_model=ShowProduct, status_code=status.HTTP_200_OK)
+@router.get("/{item_id}", response_model=ShowProduct)
 async def get_product_by_id(item_id):
     product = await collection.find_one({"_id": item_id})
     if not product:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product Not Found")
+        raise HTTPException(status_code=404, detail="No Product Found")
     return product
 
 @router.get("/generate_upc/")
@@ -62,26 +61,24 @@ async def generate_new_upc():
     upc_size = 13
     return str(random_with_N_digits(upc_size))
 
-# UPDATE
-@router.put("/{item_id}")
+@router.put("/{item_id}", status_code=201)
 async def update_product_by_id(item_id, new_product: ShowProduct):
     product = {
         "name": new_product.name,
         "type": new_product.type,
         "price": new_product.price,
         "description": new_product.description,
-        "thumnail": new_product.thumbnail,
+        "thumbnail": new_product.thumbnail,
         "upc": new_product.upc
     }
     result = await collection.update_one({"_id": item_id}, {"$set": product})
     if not result.modified_count:
-        raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"Product with ID: {item_id} was not updated")
-    return {"detail": "Updated Successfully"}
+        raise HTTPException(status_code=404, detail=f"Product with ID: {item_id} was not updated")
+    return {"detail": "Product Updated Successfully"}
 
-# DELETE
-@router.delete("/{item_id}")
+@router.delete("/{item_id}", status_code=202)
 async def delete_product_by_id(item_id):
     result = await collection.delete_one({"_id": item_id})
     if not result.deleted_count:
-        raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"Product with ID: {item_id} was not deleted")
-    return {"detail": "Deleted Successfully"}
+        raise HTTPException(status_code=204, detail=f"Product with ID: {item_id} was not deleted")
+    return {"detail": "Product Deleted Successfully"}

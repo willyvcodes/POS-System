@@ -17,7 +17,7 @@ router = APIRouter(
     tags = ['Stripe']
 )
 
-@router.post('/create-checkout-session')
+@router.post('/create-checkout-session', status_code=201)
 def create_checkout_session(check_items: List[CheckoutItem]):
     stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
     

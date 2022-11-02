@@ -6,7 +6,8 @@
     import ModalAddToCart from "../modals/ModalAddToCart.svelte";
 
     // http requests
-    import { get_all_products, create_checkout_session } from "../../helpers/http_requests"
+    import { get_all_products, create_checkout_session, get_all_orders, create_new_order } from "../../helpers/http_requests"
+    import Dashboard from "./Dashboard.svelte";
 
     // stripe
     const new_checkout_session = async () => {
@@ -191,6 +192,9 @@
                 <button class="btn btn-success btn-lg" on:click={handle_new_order}>
                     <h2 class="m-0 p-3">New Order</h2>
                 </button>
+                <button class="btn btn-info btn-sm align-self-end" on:click={""}>
+                    <span>Order History</span>
+                </button>
             </div>
         {/if}
     </div>
@@ -209,10 +213,11 @@
     }
 
     .order-container {
-        height: 100vh;
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: center;;
+        justify-content: center;
+        margin-top: 20px;
     }
 
     .menu-container {
