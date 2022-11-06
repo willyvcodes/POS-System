@@ -77,20 +77,19 @@
             <div class="col-12">
                 <div class="container-fluid my-1 py-2 bg-light rounded">
                     <div class="row">
-                        <div class="col-12 col-md-10">
+                        <div class="col-md-11 col-10">
                             <Input type="search" bind:value={search} placeholder="Search For Item Name, Type, UPC..." />
                         </div>
-                        <div class="col-12 col-md-2 mt-2 mt-md-0 d-md-flex justify-content-end">
+                        <div class="col-md-1 col-2 mt-0 d-flex justify-content-end">
                             <button class="btn btn-primary btn-md" on:click={() => handle_create_product()}>
                                 <i class="fas fa-plus"></i>
-                                <span>Create Product</span>
                             </button>
                         </div>
                     </div>
                 </div>
                 <h6 class="mx-2 mt-2">{visible_products.length} Products</h6>
                 <div class="table-container rounded">
-                    <table class="table table-light table-hover table-responsive">
+                    <table class="table table-light table-hover">
                         <thead>
                             <tr>
                                 <th scope="col">Thumbnail</th>
@@ -99,7 +98,8 @@
                                 <th scope="col">Price</th>
                                 <th scope="col">Description</th>
                                 <th scope="col">UPC</th>
-                                <th scope="col"></th>
+                                <th scope="col" style=";"></th>
+                                <th scope="col" style="width: 2%;"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -119,20 +119,14 @@
                                         <td>{item.description}</td>
                                         <td>{item.upc}</td>
                                         <td>
-                                            <div class="container">
-                                                <div class="row">
-                                                    <div class="col-12 col-md-6 m-0 p-1">
-                                                        <button class="btn btn-danger btn-md" on:click={() => handle_delete_product(item)}>
-                                                            <i class="fas fa-trash-alt"></i>
-                                                        </button>
-                                                    </div>
-                                                    <div class="col-12 col-md-6 m-0 p-1">
-                                                        <button class="btn btn-warning btn-md" on:click={() => handle_edit_product(item)}>
-                                                            <i class="fas fa-edit"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <button class="btn btn-danger btn-sm" on:click={() => handle_delete_product(item)}>
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-warning btn-sm" on:click={() => handle_edit_product(item)}>
+                                                <i class="fas fa-edit"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                 {/each}

@@ -56,7 +56,7 @@ async def stripe_success():
     <html>
         <head>
             <title>Payment Success</title>
-            <meta http-equiv="refresh" content="3; URL=http://240r2g.deta.dev" />
+            <meta http-equiv="refresh" content="1; URL=http://240r2g.deta.dev" />
         </head>
         <body>
             <h1>Thank You! Payment Success</h1>
@@ -71,6 +71,7 @@ async def stripe_cancel():
     <html>
         <head>
             <title>Payment Canceled</title>
+            <meta http-equiv="refresh" content="1; URL=http://240r2g.deta.dev" />
         </head>
         <body>
             <h1>Payment Was Canceled!</h1>

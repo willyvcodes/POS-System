@@ -71,6 +71,14 @@ export const create_new_order = async (products) => {
     });
 }
 
+export const update_order_by_id = async (order_id, updated_order) => {
+    return await fetch(`${site_path}/api/orders/` + order_id, {
+        method: 'PUT',
+        headers: headers,
+        body: JSON.stringify(updated_order)
+    });
+}
+
 // stripe
 export const create_checkout_session = async (checkout_items) => {
     return await fetch(`${site_path}/stripe/create-checkout-session`, {

@@ -1,22 +1,21 @@
 <script>
     import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'sveltestrap';
 
-    import { get_all_orders, get_product_by_id} from "../../helpers/http_requests"
-
-    import { show_toaster } from '../../helpers/alerts'
+    import { get_all_orders } from "../../helpers/http_requests"
 
     // props
+    export let loaded_order = ''
     let orders = []
-    let order_products = []
-    
 
     // modal config
     let order_history_open = false;
     let size = 'lg'
 
+    let selected_row = 0
 
     export const open_order_history = () => {
         order_history_open = !order_history_open;
+        selected_row = 0
     }
 
     const pull_all_orders = async () => {
@@ -26,13 +25,13 @@
         }
     }
 
-    const pull_product_by_id = async (product_id) => {
-        const resp = await get_product_by_id(product_id);
-        if (resp.ok) {
-            let product = await resp.json();
-            console.log(product)
-            return product
-        }
+    const handle_table_selection = (index) => {
+        selected_row = index
+    }
+
+    const load_order = () => {
+        loaded_order = (orders[selected_row - 1])
+        open_order_history()
     }
 
 </script>
@@ -40,33 +39,29 @@
 <Modal isOpen={order_history_open} {open_order_history} {size} scrollable>
     <ModalHeader {open_order_history}>Order History</ModalHeader>
     <ModalBody>
-        <table class="table table-light table-hover table-responsive">
-            <thead>
+        <table class="table table-hover table-responsive">
+            <thead class="table-dark">
                 <tr>
-                    <th scope="col"></th>
+                    <th scope="col">#</th>
                     <th scope="col">Date Created</th>
                     <th scope="col">Products In Order</th>
+                    <th scope="col">Total</th>
                 </tr>
             </thead>
             <tbody>
                 {#await pull_all_orders()}
                     <p>Loading Orders</p>
                 {:then}
-                    {#each orders as item, index}
-                        <tr>
+                    {#each orders as order, index}
+                        <tr class="{selected_row == index + 1 ? 'table-primary' : ''}" on:click={() => handle_table_selection(index+1)}>
                             <td><b>{index + 1}</b></td>
-                            <td>{(item.date_created).slice(0, 10).trim()}</td>
+                            <td>{(order.date_created).slice(0, 10).trim()}</td>
                             <td>
-                                {#each item.products as product}
-                                    {#await pull_product_by_id(product._id)}
-                                        <span>Loading Product</span>
-                                    {:then order_product}
-                                        <span>{order_product.name}</span>
-                                    {:catch}
-                                        <span>ERROR: Could Not Load Products</span>
-                                    {/await}
+                                {#each order.products as product}
+                                    <h6>{product.name} x{product.amount}</h6>
                                 {/each}
                             </td>
+                            <td><b>${order.total}</b></td>
                         </tr>
                     {/each}
                 {:catch error}
@@ -77,7 +72,7 @@
     </ModalBody>
     <ModalFooter>
         <Button color="danger" on:click={open_order_history}>Cancel</Button>
-        <Button color="success" on:click={open_order_history}>Load Order</Button>
+        <Button color="success" on:click={load_order}>Load Order</Button>
     </ModalFooter>
 </Modal>
 

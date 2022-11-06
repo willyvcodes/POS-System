@@ -1,4 +1,5 @@
 <script>
+    import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "sveltestrap";
     import TabContent from "../pages/components/TabContent.svelte";
 
     let isSidebarHidden = true;
@@ -15,11 +16,11 @@
 </script>
 
 <div class="container-fluid d-md-flex p-0 h-md-100">
-    <div class="bg-nav {(isSidebarHidden) ? 'sidebar-hidden' : 'sidebar'}">
+    <div class="bg-nav {(isSidebarHidden) ? 'sidebar-hidden' : 'sidebar'} d-md-flex flex-column">
         <!-- nav -->
         <nav class="navbar navbar-dark">
             <div class="container-fluid justify-content-md-center p-md-0">
-                <a href="/" class="navbar-brand {isSidebarHidden ? 'fs-6' : 'fs-3'} m-0">POS</a>
+                <a href="/" class="navbar-brand fs-5 m-0">POS</a>
                 <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" on:click={toggleNabbar}>
                     {#if isNavbarToggled}
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
@@ -61,10 +62,21 @@
                 </div>
             </div>
         </nav>
-        <hr class="d-none d-md-block text-light mx-3" />
+        <!-- User
+        <div class="d-none d-md-flex justify-content-center mt-auto">
+            <Dropdown size="lg">
+                <DropdownToggle color="dark">
+                    <span>JD</span>
+                </DropdownToggle>
+                <DropdownMenu dark>
+                    <DropdownItem header>John Doe</DropdownItem>
+                    <DropdownItem>Logout</DropdownItem>
+                </DropdownMenu>
+            </Dropdown>
+        </div> -->
         <!-- hide sidebar -->
-        <div class="d-md-flex justify-content-center">
-            <button class="btn btn-dark d-none d-md-inline-block" on:click={toggleSidebar}>
+        <div class="d-none d-md-flex justify-content-center border-top mt-auto">
+            <button class="btn btn-dark bg-transparent border-0" on:click={toggleSidebar}>
                 {#if isSidebarHidden}
                     <i class="fas fa-chevron-right"></i>
                 {:else}
@@ -86,11 +98,11 @@
         }
 
         .sidebar-hidden {
-            min-width: 30px !important;
+            min-width: 32px !important;
         }
 
         .sidebar-hidden .navbar-nav .nav-item .nav-link span {
-            display: none;
+            display: none;;
         }
     }
 

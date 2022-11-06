@@ -1,13 +1,33 @@
 <script>
-    import CardProduct from "../components/CardProduct.svelte";
     import { Input } from 'sveltestrap';
     import { show_toaster, show_confirm_dialog } from '../../helpers/alerts'
-
+    import CardProduct from "../components/CardProduct.svelte";
     import ModalAddToCart from "../modals/ModalAddToCart.svelte";
+    import ModalOrderHistory from "../modals/ModalOrderHistory.svelte";
 
     // http requests
-    import { get_all_products, create_checkout_session, create_new_order } from "../../helpers/http_requests"
-    import ModalOrderHistory from "../modals/ModalOrderHistory.svelte";
+    import { get_all_products, create_checkout_session, create_new_order, update_order_by_id } from "../../helpers/http_requests"
+    
+    let products = []
+    let cartItems = []
+    let order_id = ''
+
+    let visible_products = []
+    let search = ''
+    let total
+
+    // Modal
+    let modal_add_to_cart;
+    let modal_order_history;
+
+    let selected_item;
+    
+    // DATE
+    const date = new Date()
+    let currentDate = date.toDateString().slice(0, -4)
+
+    let old_order = ''
+    let open_order = false
 
     // stripe
     const new_checkout_session = async () => {
@@ -21,29 +41,35 @@
             })
         });
         
-        create_order()
+        save_order()
 
         const resp = await create_checkout_session(checkout_items);
         if (resp.ok) {
             const checkout_url = await resp.json()
-            window.location.href = checkout_url        }
+            window.location.href = checkout_url        
+        }
     }
     // 
 
-    let products = []
-    let cartItems = []
-
-    let visible_products = []
-    let search = ''
-
     $: visible_products = search ?
-            products.filter(product => {
-                let product_name = product.name.toLowerCase()
-                let product_type = product.type.toLowerCase()
-                if (product_name.includes(search.toLowerCase()) || product_type.includes(search.toLowerCase()) || product.upc.includes(search))
-                    return product
+        products.filter(product => {
+            let product_name = product.name.toLowerCase()
+            let product_type = product.type.toLowerCase()
+            if (product_name.includes(search.toLowerCase()) || product_type.includes(search.toLowerCase()) || product.upc.includes(search))
+                return product
         }) : products;
     
+
+    $: total = cartItems.reduce((p, c) => {
+        return p + (c.price * c.amount)
+    }, 0)
+
+    $: if(old_order && !open_order) {
+        cartItems = old_order['products']
+        order_id = old_order['_id']
+        handle_open_order()
+    }
+
     const pull_all_products = async () => {
         const resp = await get_all_products();
         if (resp.ok) {
@@ -51,25 +77,6 @@
         }
     }
 
-    // CHECKOUT SETTINGS
-    let subtotal = 0;
-    let total = 0;
-
-    $: subtotal = cartItems.reduce((p, c) => {
-        return p + (c.price * c.amount)
-    }, 0)
-
-    $: total = subtotal;
-    // 
-    // DATE
-    const date = new Date()
-    let currentDate = date.toDateString().slice(0, -4)
-
-    // Modal
-    let modal_add_to_cart;
-    let modal_order_history;
-
-    let selected_item;
     const handle_add_to_cart = (new_item) => {
         const index = cartItems.findIndex(existing_item => existing_item._id === new_item._id)
         if (index == -1) {
@@ -94,23 +101,36 @@
         });
     }
 
-    const create_order = async () => {
-        let order_products = []
-        cartItems.forEach(item => {
-            order_products.push({
-                "_id": item._id,
-            })
-        });
-        const resp = await create_new_order(order_products);
-        if (resp.ok) {
-            console.log('Order Created')
+    const save_order = async () => {
+        const order = {
+            'products': cartItems,
+            'total': total
+        }
+
+        let resp
+        if (order_id) {
+            resp = await update_order_by_id(order_id, order)
+        }
+        else {
+            resp = await create_new_order(order);
+        }
+
+        if (!resp.ok) {
+            console.log('Could Not Save Order')
         }
     }
 
+    const handle_open_order = () => {
+        open_order = !open_order
+    }
 
-    let new_order = false
-    const handle_new_order = () => {
-        new_order = !new_order
+    const handle_cancel_order = () => {
+        show_confirm_dialog('Cancel Order', `Are you sure want to cancel this order?`, 'Cancel Order', 'Continue', async ()=> {
+            cartItems = []
+            old_order = ''
+            order_id = ''
+            handle_open_order()
+        });
     }
 
     const handle_order_history = () => {
@@ -121,18 +141,18 @@
 
 <div class="tab-pane fade active show h-100" id="orders" role="tab">
     <div class="container-fluid h-100">
-        {#if new_order}
+        {#if open_order }
             <div class="row h-100">
-                <div class="col-12 col-md-8 col-lg-9">
+                <div class="col-12 col-md-8 col-xl-9">
                     <!-- products heading -->
                     <div class="container-fluid my-1 py-2 bg-light rounded">
                         <div class="row">
-                            <div class="col-12 col-md-10">
+                            <div class="col-md-11 col-10">
                                 <Input type="search" bind:value={search} placeholder="Search For Item Name, Type, UPC..." />
                             </div>
-                            <div class="col-12 col-md-2 mt-2 mt-md-0 d-md-flex justify-content-end">
-                                <button class="btn btn-warning btn-md" on:click={() => handle_new_order()}>
-                                    <span>Cancel Order</span>
+                            <div class="col-md-1 col-2 mt-0 d-flex justify-content-end">
+                                <button class="btn btn-warning btn-md" on:click={() => handle_cancel_order()}>
+                                    <i class="fas fa-times"></i>
                                 </button>
                             </div>
                         </div>
@@ -152,12 +172,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-4 col-lg-3 px-1 py-4 min-vh-100 checkout-container" id="checkout_section">
+                <div class="col-12 col-md-4 col-xl-3 px-1 py-3 min-vh-100 checkout-container" id="checkout_section">
                     <div class="container-fluid d-flex flex-column h-100">
                         <div class="checkout-heading">
                             <div class="row">
                                 <div class="col-6">
-                                    <h5>Checkout</h5>
+                                    <span class="fas fa-shopping-cart fs-3 text-success"></span>
                                 </div>
                                 <div class="col-6 text-end">
                                     <h5>{currentDate}</h5>
@@ -189,14 +209,6 @@
                         <div class="checkout-pay">
                             <hr>
                             <div class="row">
-                                <div class="col-6">
-                                    <h6>Subtotal</h6>
-                                </div>
-                                <div class="col-6 text-end">
-                                    <h6>${subtotal.toFixed(2)}</h6>
-                                </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-12">
                                     <button class="btn btn-success btn-pay fs-3 {(cartItems.length == 0) ? 'disabled' : ''}" on:click={() => new_checkout_session()}>Pay (${total.toFixed(2)})</button>
                                 </div>
@@ -207,7 +219,7 @@
             </div>
         {:else}
             <div class="order-container">
-                <button class="btn btn-success btn-lg " on:click={handle_new_order}>
+                <button class="btn btn-success btn-lg " on:click={handle_open_order}>
                     <h2 class="m-0 p-3">New Order</h2>
                 </button>
                 <button class="btn btn-primary btn-md" on:click={handle_order_history}>
@@ -220,7 +232,7 @@
 
     <!-- modals -->
     <ModalAddToCart bind:this={modal_add_to_cart} bind:item={selected_item} bind:itemList={cartItems} />
-    <ModalOrderHistory bind:this={modal_order_history} />
+    <ModalOrderHistory bind:this={modal_order_history} bind:loaded_order={old_order}/>
 </div>
 
 <style>
@@ -235,19 +247,13 @@
         }
     }
 
-    /* .order-history-btn {
-        position: fixed;
-        bottom: 20px;
-        z-index: 1000;
-    } */
-
     .order-container {
-        height: 100%;
+        height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: space-around;
-        margin-top: 20px;
+        padding-top: 20px;
     }
 
     .menu-container {
@@ -267,7 +273,7 @@
     }
 
     .checkout-items {
-        height: calc(100vh - 280px);
+        height: calc(100vh - 200px);
         padding: 4px;
         overflow-y: auto;
         overflow-x: hidden;
