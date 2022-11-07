@@ -9,7 +9,7 @@ collection = db.orders
 
 class Order(BaseModel):
     products: List[dict]
-    total: float
+    total: str
 
 router = APIRouter(
     prefix = '/api/orders',

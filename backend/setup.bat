@@ -18,5 +18,5 @@ echo INSTALLING DEPENDENCIES
 pip install -r requirements.txt
 
 echo RUNNING SERVER
-uvicorn main:app --reload
-@REM uvicorn main:app --reload ssl_keyfile="./key.pem" ssl_certfile="./cert.pem"
+@REM uvicorn main:app --reload
+uvicorn main:app --reload ssl_keyfile="./key.pem" ssl_certfile="./cert.pem"

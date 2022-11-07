@@ -104,7 +104,7 @@
     const save_order = async () => {
         const order = {
             'products': cartItems,
-            'total': total
+            'total': total.toFixed(2)
         }
 
         let resp
