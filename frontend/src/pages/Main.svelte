@@ -41,7 +41,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#orders">
+                            <a class="nav-link" data-bs-toggle="tab" href="#orders">
                                 <i class="fas fa-list-ol"></i>
                                 <span>ORDERS</span>
                             </a>
@@ -53,7 +53,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#settings">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#settings">
                                 <i class="fas fa-cog"></i>
                                 <span>SETTINGS</span>
                             </a>

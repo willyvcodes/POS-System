@@ -139,7 +139,7 @@
 
 </script>
 
-<div class="tab-pane fade active show h-100" id="orders" role="tab">
+<div class="tab-pane fade show h-100" id="orders" role="tab">
     <div class="container-fluid h-100">
         {#if open_order }
             <div class="row h-100">
