@@ -4,3 +4,4 @@ pymongo
 python-dotenv
 stripe
 uvicorn
+passlib[bcrypt]

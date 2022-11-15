@@ -79,6 +79,30 @@ export const update_order_by_id = async (order_id, updated_order) => {
     });
 }
 
+// users
+export const create_user = async (user) => {
+    return await fetch(`${site_path}/api/users/`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(user)
+    });
+}
+
+export const get_user_by_username = async (username) => {
+    return await fetch(`${site_path}/api/users/` + username, {
+        method: 'GET',
+        headers: headers
+    });
+}
+
+export const login_user = async (user) => {
+    return await fetch(`${site_path}/api/users/login`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(user)
+    });
+}
+
 // stripe
 export const create_checkout_session = async (checkout_items) => {
     return await fetch(`${site_path}/stripe/create-checkout-session`, {

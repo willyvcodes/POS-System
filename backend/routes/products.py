@@ -40,7 +40,7 @@ async def create_product(product: ShowProduct):
         await collection.insert_one(product)
         return {"detail": "Product Created Successfully"}
     except Exception as e:
-        raise HTTPException(status_code=500)
+        raise HTTPException(status_code=500) from e
     
 @router.get("/")
 async def get_all_products():

@@ -1,9 +1,17 @@
 <script>
     import Main from "./pages/Main.svelte";
+    import Login from "./pages/Login.svelte";
+
+    import { user } from "./helpers/stores";
+    
 </script>
 
-<main>
-  <Main />
+<main class="bg-dark">
+  {#if (!$user)}
+		<Login />
+	{:else}
+		<Main />
+	{/if}
 </main>
 
 <style>
@@ -14,7 +22,7 @@
     font-family: "Nunito Sans" !important;
     font-weight: 400 !important;
     letter-spacing: .03rem;
-    height: 100% !important;
+    height: 100% !important
   }
 
 </style>
