@@ -6,7 +6,7 @@
     <div class="container-fluid h-100">
         <div class="row h-100">
             <div class="col-12">
-                <p>DASHBOARD</p>
+                <p>DASHBOARD - willy new features</p>
             </div>
         </div>
     </div>

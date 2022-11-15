@@ -35,7 +35,7 @@ async def add_order(new_order: Order):
         await collection.insert_one(order)
         return {"detail": "Order Created Successfully"}
     except Exception as e:
-        raise HTTPException(status_code=500)
+        raise HTTPException(status_code=500) from e
 
 @router.put('/{order_id}', status_code=201)
 async def update_order(order_id: str, updated_order: Order):

@@ -1,6 +1,8 @@
 <script>
-    import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "sveltestrap";
     import TabContent from "../pages/components/TabContent.svelte";
+    import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'sveltestrap'
+
+    import { user, logout } from '../helpers/stores'
 
     let isSidebarHidden = true;
     let isNavbarToggled = false;
@@ -62,20 +64,20 @@
                 </div>
             </div>
         </nav>
-        <!-- User
+        <!-- User -->
         <div class="d-none d-md-flex justify-content-center mt-auto">
             <Dropdown size="lg">
                 <DropdownToggle color="dark">
-                    <span>JD</span>
+                    <span>{($user.username).substring(0, 2).toUpperCase()}</span>
                 </DropdownToggle>
                 <DropdownMenu dark>
-                    <DropdownItem header>John Doe</DropdownItem>
-                    <DropdownItem>Logout</DropdownItem>
+                    <DropdownItem header>{$user.full_name}</DropdownItem>
+                    <DropdownItem on:click={logout}>Logout</DropdownItem>
                 </DropdownMenu>
             </Dropdown>
-        </div> -->
-        <!-- hide sidebar -->
-        <div class="d-none d-md-flex justify-content-center border-top mt-auto">
+        </div>
+        <!-- Hide Sidebar -->
+        <div class="d-none d-md-flex justify-content-center border-top m-2">
             <button class="btn btn-dark bg-transparent border-0" on:click={toggleSidebar}>
                 {#if isSidebarHidden}
                     <i class="fas fa-chevron-right"></i>

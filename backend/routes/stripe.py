@@ -20,32 +20,31 @@ router = APIRouter(
 @router.post('/create-checkout-session', status_code=201)
 def create_checkout_session(check_items: List[CheckoutItem]):
     stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
-    
+
     domain_url = 'https://240r2g.deta.dev/'
     # domain_url = 'https://localhost:8000/'
-    new_line_items = []
-    
-    for product in check_items:
-        new_line_items.append({
+    new_line_items = [
+        {
             'price_data': {
-                'currency': 'usd',
-                'unit_amount': product.price,
+                'currency': 'usd', 
+                'unit_amount': product.price, 
                 'product_data': {
-                    'name': product.name ,
+                    'name': product.name, 
                     'images': [product.thumbnail],
                 },
-            },
+            }, 
             'quantity': product.quantity,
-        })
+        } for product in check_items]
+
 
     try:
         session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=new_line_items,
-            mode='payment',
-            success_url=domain_url + 'stripe/success',
-            cancel_url=domain_url + 'stripe/cancel'
-        )
+            payment_method_types=['card'], 
+            line_items=new_line_items, 
+            mode='payment', 
+            success_url=f'{domain_url}stripe/success', 
+            cancel_url=f'{domain_url}stripe/cancel')
+
         return session.url
     except Exception as e:
         return {'detail': e}
