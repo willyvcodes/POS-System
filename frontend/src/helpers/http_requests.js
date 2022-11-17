@@ -50,8 +50,7 @@ export const delete_product_by_id = async (item_id) => {
 export const generate_new_upc_13 = async () => {
     return await fetch(`${site_path}/api/products/generate_upc/`, {
         method: 'GET',
-        headers: headers,
-        body: JSON.stringify(item)
+        headers: headers
     });
 }
 
@@ -71,7 +70,7 @@ export const create_new_order = async (products) => {
     });
 }
 
-export const update_order_by_id = async (order_id, updated_order) => {
+export const update_order_by_id = async (updated_order, order_id) => {
     return await fetch(`${site_path}/api/orders/` + order_id, {
         method: 'PUT',
         headers: headers,
@@ -100,6 +99,14 @@ export const login_user = async (user) => {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(user)
+    });
+}
+
+export const update_user_by_id = async (updated_user, user_id) => {
+    return await fetch(`${site_path}/api/users/` + user_id, {
+        method: 'PUT',
+        headers: headers,
+        body: JSON.stringify(updated_user)
     });
 }
 

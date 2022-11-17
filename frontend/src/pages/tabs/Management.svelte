@@ -19,7 +19,6 @@
         if (resp.ok) {
             products = await resp.json();
         }
-        updated = false;
         created = false;
     }
 
@@ -71,7 +70,7 @@
 
 </script>
 
-<div class="tab-pane fade h-100" id="management" role="tabpanel">
+<div class="tab-pane fade show h-100" id="management" role="tab">
     <div class="container-fluid h-100">
         <div class="row h-100">
             <div class="col-12">
@@ -139,8 +138,9 @@
             </div>
         </div>
     </div>
+    
     <!-- modals -->
-    <ModalEditProduct bind:this={modal_edit_product} bind:item={selected_item} bind:is_updated={updated}/>
+    <ModalEditProduct bind:this={modal_edit_product} bind:product={selected_item} bind:is_updated={updated}/>
     <ModalCreateProduct bind:this={modal_create_product} bind:is_created={created}/>
 </div>
 

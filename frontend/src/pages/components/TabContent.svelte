@@ -1,15 +1,15 @@
 <script>
-    import Dashboard from "../tabs/Dashboard.svelte";
+    // import Dashboard from "../tabs/Dashboard.svelte";
     import Orders from "../tabs/Orders.svelte";
     import Management from "../tabs/Management.svelte";
-    import Settings from "../tabs/Settings.svelte";
+    import Profile from "../tabs/Profile.svelte";
 </script>
 
 <div class="tab-content h-100">
-    <Dashboard />
+    <!-- <Dashboard /> -->
     <Orders />
     <Management />
-    <Settings />
+    <Profile />
 </div>
 
 <style>

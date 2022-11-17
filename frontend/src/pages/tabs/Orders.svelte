@@ -109,7 +109,7 @@
 
         let resp
         if (order_id) {
-            resp = await update_order_by_id(order_id, order)
+            resp = await update_order_by_id(order, order_id)
         }
         else {
             resp = await create_new_order(order);
@@ -139,7 +139,7 @@
 
 </script>
 
-<div class="tab-pane fade show h-100" id="orders" role="tab">
+<div class="tab-pane fade show active h-100" id="orders" role="tab">
     <div class="container-fluid h-100">
         {#if open_order }
             <div class="row h-100">
@@ -226,7 +226,6 @@
                     <span class="m-0">History</span>
                 </button>
             </div>
-
         {/if}
     </div>
 

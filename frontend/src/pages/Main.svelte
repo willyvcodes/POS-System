@@ -36,28 +36,28 @@
                 </button>
                 <div class="collapse navbar-collapse d-md-flex justify-content-center" id="navbarNav">
                     <ul class="navbar-nav nav">
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#dashboard">
-                                <i class="fas fa-tachometer-alt"></i>
+                                <i class="fas fa-tachometer-alt text-center"></i>
                                 <span>DASHBOARD</span>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#orders">
-                                <i class="fas fa-list-ol"></i>
+                            <a class="nav-link active" data-bs-toggle="tab" href="#orders">
+                                <i class="fas fa-shopping-cart text-center"></i>
                                 <span>ORDERS</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#management">
-                                <i class="fas fa-users-cog"></i>
+                                <i class="fas fa-cog text-center"></i>
                                 <span>MANAGEMENT</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#settings">
-                                <i class="fas fa-cog"></i>
-                                <span>SETTINGS</span>
+                            <a class="nav-link" data-bs-toggle="tab" href="#profile">
+                                <i class="fas fa-user text-center"></i>
+                                <span>ACCOUNT</span>
                             </a>
                         </li>
                     </ul>
@@ -66,12 +66,16 @@
         </nav>
         <!-- User -->
         <div class="d-none d-md-flex justify-content-center mt-auto">
-            <Dropdown size="lg">
+            <Dropdown size="md">
                 <DropdownToggle color="dark">
-                    <span>{($user.username).substring(0, 2).toUpperCase()}</span>
+                    {#if isSidebarHidden}
+                        <span>{($user.firstname).substring(0, 1).toUpperCase()}{($user.lastname).substring(0, 1).toUpperCase()}</span>
+                    {:else}
+                        <span>{$user.username}</span>
+                    {/if}
                 </DropdownToggle>
                 <DropdownMenu dark>
-                    <DropdownItem header>{$user.full_name}</DropdownItem>
+                    <DropdownItem header>{($user.firstname).toUpperCase()} {($user.lastname).toUpperCase()}</DropdownItem>
                     <DropdownItem on:click={logout}>Logout</DropdownItem>
                 </DropdownMenu>
             </Dropdown>
