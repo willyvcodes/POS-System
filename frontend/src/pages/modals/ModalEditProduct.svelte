@@ -32,8 +32,8 @@
 
         const resp = await update_product_by_id(updated_product, new_product._id);
         if (resp.ok) {
-            show_toaster('success','Updated Successfully')
-            product = temp_product
+            show_toaster('success','Updated Successfully') 
+            is_updated = true;
         }
         open_edit_product()
     }

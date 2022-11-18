@@ -53,10 +53,10 @@
                 <Label>Last Name</Label>
                 <Input type="text" bind:value={temp_user.lastname}/>
             </FormGroup>
-            <FormGroup>
+            <!-- <FormGroup>
                 <Label>Username</Label>
                 <Input type="text" bind:value={temp_user.username}/>
-            </FormGroup>
+            </FormGroup> -->
             <FormGroup>
                 <Label>Email</Label>
                 <Input type="text" bind:value={temp_user.email}/>

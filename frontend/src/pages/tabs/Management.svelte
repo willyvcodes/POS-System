@@ -1,7 +1,7 @@
 <script>
     import { Input } from 'sveltestrap';
 
-    import ModalEditProduct from "../modals/ModalEditProduct.svelte";
+    import ModalEditProduct from '../modals/ModalEditProduct.svelte';
     import ModalCreateProduct from '../modals/ModalCreateProduct.svelte';
 
     import { get_all_products, delete_product_by_id } from "../../helpers/http_requests"
@@ -19,6 +19,7 @@
         if (resp.ok) {
             products = await resp.json();
         }
+        updated = false;
         created = false;
     }
 
@@ -54,6 +55,7 @@
 
     let updated, created
     $: if (updated || created) {
+        console.log('hello world')
         pull_all_products();
     }
 
@@ -118,7 +120,7 @@
                                         <td>{item.description}</td>
                                         <td>{item.upc}</td>
                                         <td>
-                                            <button class="btn btn-danger btn-sm" on:click={() => handle_delete_product(item)}>
+                                            <button class="btn btn-danger btn-sm disabled" on:click={() => handle_delete_product(item)}>
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </td>
