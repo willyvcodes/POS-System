@@ -21,15 +21,6 @@ Frontend
 - [Seveltestrap](https://sveltestrap.js.org/)
 - [Bootstraps](https://getbootstrap.com/)
 
-## Contributing
-
-- [Jorge Cortes](https://github.com/DrNaberius)
-- [Javier Fernandez](https://github.com/javier-fernandez1219)
-- [Luis Ojeda](https://github.com/leoCaliCol)
-- [Yassel Pena](https://github.com/continue-um)
-- [William Valido](https://github.com/willysyztem)
-- [Kevin Zheng](https://github.com/kzhen006)
-
 ## Features
 
 - Dashboard Displaying POS Stats 
