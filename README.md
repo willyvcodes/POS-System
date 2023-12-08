@@ -3,7 +3,6 @@
 ## Index
 
 - [Frameworks](#Frameworks)
-- [Contributing](#Contributing)
 - [Features](#Features)
 - [Installation](#Installation)
 
@@ -11,7 +10,6 @@
 
 Database
 - [MongoDB](https://www.mongodb.com/)
-    - Using MongoDB Free Cluster
 
 Backend
 - [FastAPI](https://fastapi.tiangolo.com/)
@@ -24,7 +22,7 @@ Frontend
 ## Features
 
 - Dashboard Displaying POS Stats 
-- Create Orders / Handle Payment ✅
+- Create Orders / Handle Payment
 - Product Management
 - App Settings
 
@@ -54,7 +52,4 @@ In Order to run this you will need to install:
 - open your favorite browser 🌐
     - got to `localhost:8000/` for hompage
     - go to  `localhost:8000/docs` to use API
-
-- Stripe test data
-    - Card Number: `4242 4242 4242 4242` any future year, ex: `12/34`, CVC: `123`
     
